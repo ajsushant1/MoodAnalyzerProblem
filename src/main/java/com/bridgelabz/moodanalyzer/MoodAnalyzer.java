@@ -11,12 +11,17 @@ public class MoodAnalyzer {
     }
     //METHOD TO ANALYSE MOOD
     public String analyseMood() {
-        if (message.contains("Sad")){
-            return "SAD";
+        try {
+            if (message.contains("Sad")) {
+                return "SAD";
+            } else {
+                return "HAPPY";
+            }
         }
-        else {
-            return "HAPPY";
+        catch (Exception e){
+            e.getStackTrace();
         }
+        return "HAPPY";
     }
 
     public static void main(String[] args) {

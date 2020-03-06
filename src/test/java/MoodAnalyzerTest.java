@@ -3,7 +3,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class MoodAnalyzerTest {
-
     //TEST CASE TO ANALYSE SAD MOOD
     @Test
     public void givenMessage_WhenMoodSad_ShouldReturnSAD() {
@@ -15,6 +14,13 @@ public class MoodAnalyzerTest {
     @Test
     public void givenMessage_WhenMoodHappyOrAny_ShouldReturnHAPPY() {
         MoodAnalyzer moodAnalyzer=new MoodAnalyzer("I am in Happy Mood");
+        String analyseMood = moodAnalyzer.analyseMood();
+        Assert.assertEquals("HAPPY",analyseMood);
+    }
+
+    @Test
+    public void givenMessage_WhenNULL_ShouldReturnHAPPY() {
+        MoodAnalyzer moodAnalyzer=new MoodAnalyzer(null);
         String analyseMood = moodAnalyzer.analyseMood();
         Assert.assertEquals("HAPPY",analyseMood);
     }
