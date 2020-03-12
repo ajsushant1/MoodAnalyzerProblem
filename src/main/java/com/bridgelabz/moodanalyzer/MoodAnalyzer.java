@@ -17,8 +17,7 @@ public class MoodAnalyzer {
     //METHOD TO ANALYSE MOOD
     public String analyseMood() throws MoodAnalysisException{
         try {
-            if (message.length() == 0)
-            {
+            if (message.length() == 0) {
                 throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.EMPTY,"You entered Empty mood,Please enter proper mood");
             }
             if (message.contains("Sad")) {
@@ -33,8 +32,21 @@ public class MoodAnalyzer {
 
     }
 
+    //METHOD CHECK TWO OBJECT ARE EQUAL OR NOT
+    public boolean equals(Object another){
+        if (this.message.equals(((MoodAnalyzer)another).message))
+            return true;
+        return false;
+    }
+
+    //MAIN METHOD
     public static void main(String[] args) {
         System.out.println("/**************************/ WELCOME TO MOOD ANALYZER /**************************/");
-
+        MoodAnalyzer m=new MoodAnalyzer();
+        try {
+            m.analyseMood(null);
+        } catch (MoodAnalysisException e) {
+            e.printStackTrace();
+        }
     }
 }
