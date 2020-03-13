@@ -50,13 +50,13 @@ public class MoodAnalyzerTest {
         }
     }
 
-
     @Test
     public void givenMoodAnalyzerClass_WhenProper_ShouldReturnObject() {
         try {
             MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
             Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer");
             Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor);
+            System.out.println(constructor);
             Assert.assertEquals(moodAnalyzer1, result);
         } catch (Exception e) {
             e.getStackTrace();
@@ -110,6 +110,30 @@ public class MoodAnalyzerTest {
             MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
+        }
+    }
+
+    @Test
+    public void givenHappyMessage_WithDefaultConstructor_ShouldReturnHappy() {
+        try {
+            MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer",String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
+            Assert.assertEquals("HAPPY",mood);
+        }catch (MoodAnalysisException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenHappyMessage_WhenImproperMethodName_ShouldReturnException() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer",String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analseMood");
+        }catch (MoodAnalysisException e){
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD,e.type);
         }
     }
 }
