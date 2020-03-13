@@ -66,7 +66,7 @@ public class MoodAnalyzerTest {
     @Test
     public void givenInvalidMethodParameter_WhenImproper_ShouldThrowException() {
         try {
-          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", Integer.class);
+            MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", Integer.class);
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
         }
@@ -75,7 +75,7 @@ public class MoodAnalyzerTest {
     @Test
     public void givenInvalidClassName_WhenImproper_ShouldThrowException() {
         try {
-          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MooAnalyzer", String.class);
+            MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MooAnalyzer", String.class);
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
         }
@@ -86,7 +86,7 @@ public class MoodAnalyzerTest {
         try {
             MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
             Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer");
-            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "I am in Happy mood");
             Assert.assertEquals(moodAnalyzer1, result);
         } catch (Exception e) {
             e.getStackTrace();
@@ -97,7 +97,7 @@ public class MoodAnalyzerTest {
     public void givenMoodAnalyzerClassConstructorWithParameterAndInvalidMethodParameter_WhenImproper_ShouldThrowException() {
         try {
             Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", Integer.class);
-            MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            MoodAnalyzerFactory.createMoodAnalyzer(constructor, "I am in Happy mood");
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
         }
@@ -107,7 +107,7 @@ public class MoodAnalyzerTest {
     public void givenMoodAnalyzerClassConstructorWithParameterInvalidClassName_WhenImproper_ShouldThrowException() {
         try {
             Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MooAnalyzer", String.class);
-            MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            MoodAnalyzerFactory.createMoodAnalyzer(constructor, "I am in Happy mood");
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
         }
@@ -116,12 +116,11 @@ public class MoodAnalyzerTest {
     @Test
     public void givenHappyMessage_WithDefaultConstructor_ShouldReturnHappy() {
         try {
-            MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
-            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer",String.class);
-            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "I am in Happy mood");
             Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
-            Assert.assertEquals("HAPPY",mood);
-        }catch (MoodAnalysisException e){
+            Assert.assertEquals("HAPPY", mood);
+        } catch (MoodAnalysisException e) {
             e.printStackTrace();
         }
     }
@@ -129,11 +128,50 @@ public class MoodAnalyzerTest {
     @Test
     public void givenHappyMessage_WhenImproperMethodName_ShouldReturnException() {
         try {
-            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer",String.class);
-            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
-            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analseMood");
-        }catch (MoodAnalysisException e){
-            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD,e.type);
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "I am in Happy mood");
+            MoodAnalyzerFactory.invokeMethod(result, "analseMood");
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
+        }
+    }
+
+    @Test
+    public void setTheFieldWithReflection_WhenProper_ShouldReturnHappy() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "");
+            MoodAnalyzerFactory.setFieldValue(result, "message", "I am in Happy mood");
+            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
+            Assert.assertEquals("HAPPY", mood);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    @Test
+    public void setTheField_WhenImproper_ShouldThrowException() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "");
+            MoodAnalyzerFactory.setFieldValue(result, "mssage", "I am in Happy mood");
+            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
+            Assert.assertEquals("HAPPY", mood);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD, e.type);
+        }
+    }
+
+    @Test
+    public void setTheFieldValueNull_WhenImproper_ShouldThrowException() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor, "");
+            MoodAnalyzerFactory.setFieldValue(result, "message", null);
+            Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
+            Assert.assertEquals("HAPPY", mood);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD, e.type);
         }
     }
 }
