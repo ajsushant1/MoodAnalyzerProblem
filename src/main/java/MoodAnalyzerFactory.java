@@ -50,16 +50,16 @@ public class MoodAnalyzerFactory {
     }
 
     //METHOD TO SET FIELD OF METHOD
-    public static void setFieldValue(Object result,String fieldName,String fieldValue) throws MoodAnalysisException {
+    public static void setFieldValue(Object result, String fieldName, String fieldValue) throws MoodAnalysisException {
         try {
-            if(fieldValue == null){
-                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NULL,"Field value is Null");
+            if (fieldValue == null) {
+                throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NULL, "Field value is Null");
             }
             Field field = result.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
-            field.set(result,fieldValue);
+            field.set(result, fieldValue);
         } catch (NoSuchFieldException e) {
-            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD,"No such field");
+            throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD, "No such field");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
