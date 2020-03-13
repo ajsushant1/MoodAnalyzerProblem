@@ -171,7 +171,7 @@ public class MoodAnalyzerTest {
             Object mood = MoodAnalyzerFactory.invokeMethod(result, "analyseMood");
             Assert.assertEquals("HAPPY", mood);
         } catch (MoodAnalysisException e) {
-            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_FIELD, e.type);
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NULL, e.type);
         }
     }
 }
