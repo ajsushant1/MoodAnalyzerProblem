@@ -75,7 +75,39 @@ public class MoodAnalyzerTest {
     @Test
     public void givenInvalidClassName_WhenImproper_ShouldThrowException() {
         try {
-          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MooAnalyzer", String.class);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
+        }
+    }
+
+    @Test
+    public void givenMoodAnalyzerClassConstructorWithParameter_WhenProper_ShouldReturnObject() {
+        try {
+            MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer");
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+            Assert.assertEquals(moodAnalyzer1, result);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    @Test
+    public void givenMoodAnalyzerClassConstructorWithParameterAndInvalidMethodParameter_WhenImproper_ShouldThrowException() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", Integer.class);
+            MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
+        }
+    }
+
+    @Test
+    public void givenMoodAnalyzerClassConstructorWithParameterInvalidClassName_WhenImproper_ShouldThrowException() {
+        try {
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MooAnalyzer", String.class);
+            MoodAnalyzerFactory.createMoodAnalyzer(constructor,"I am in Happy mood");
         } catch (MoodAnalysisException e) {
             Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
         }
