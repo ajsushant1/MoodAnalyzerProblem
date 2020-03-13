@@ -3,6 +3,8 @@ import com.bridgelabz.moodanalyzer.MoodAnalyzer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+
 public class MoodAnalyzerTest {
     @Test
     public void givenMessage_WhenMoodSad_ShouldReturnSAD() {
@@ -44,19 +46,38 @@ public class MoodAnalyzerTest {
         try {
             moodAnalyzer.analyseMood("");
         } catch (MoodAnalysisException e) {
-
             Assert.assertEquals(MoodAnalysisException.ExceptionType.EMPTY, e.type);
         }
     }
 
+
     @Test
     public void givenMoodAnalyzerClass_WhenProper_ShouldReturnObject() {
         try {
-            MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.createMoodAnalyzer();
-            Assert.assertEquals(new MoodAnalyzer(), moodAnalyzer);
+            MoodAnalyzer moodAnalyzer1 = new MoodAnalyzer();
+            Constructor<?> constructor = MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer");
+            Object result = MoodAnalyzerFactory.createMoodAnalyzer(constructor);
+            Assert.assertEquals(moodAnalyzer1, result);
         } catch (Exception e) {
             e.getStackTrace();
         }
+    }
 
+    @Test
+    public void givenInvalidMethodParameter_WhenImproper_ShouldThrowException() {
+        try {
+          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", Integer.class);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_METHOD, e.type);
+        }
+    }
+
+    @Test
+    public void givenInvalidClassName_WhenImproper_ShouldThrowException() {
+        try {
+          MoodAnalyzerFactory.getConstructor("com.bridgelabz.moodanalyzer.MoodAnalyzer", String.class);
+        } catch (MoodAnalysisException e) {
+            Assert.assertEquals(MoodAnalysisException.ExceptionType.NO_SUCH_CLASS, e.type);
+        }
     }
 }
